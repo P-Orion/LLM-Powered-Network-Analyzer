@@ -7,6 +7,8 @@
 
 A privacy-focused network packet analysis tool that runs entirely locally using Gemma 2 12B LLM via Ollama. Upload PCAPNG network capture files and get plain-English security analysis with actionable recommendations.
 
+This application can take network logs, break them down, identify anomalies, and return the who, what, when, where, and why behind those anomalies. It also provides action plans that users can follow to resolve them. Everything runs locally, remains secure, and makes a complex task manageable for anyone. The UI is modern and intuitive.
+
 ![Network Analyzer Demo](docs/images/demo-screenshot.png)
 
 ## 🚀 Features
