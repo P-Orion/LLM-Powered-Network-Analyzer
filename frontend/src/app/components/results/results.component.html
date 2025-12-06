@@ -1,0 +1,150 @@
+<!-- Progress Section -->
+<mat-card *ngIf="isInProgress" class="progress-card">
+  <mat-card-content>
+    <div class="progress-header">
+      <mat-icon class="spinning">sync</mat-icon>
+      <h3>{{ message }}</h3>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+    <p class="progress-text">{{ progress }}% complete</p>
+  </mat-card-content>
+</mat-card>
+
+<!-- Error Section -->
+<mat-card *ngIf="isError" class="error-card">
+  <mat-card-content>
+    <div class="error-header">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Analysis Failed</h3>
+    </div>
+    <p>{{ message }}</p>
+  </mat-card-content>
+</mat-card>
+
+<!-- Results Section -->
+<div *ngIf="isComplete && results" class="results-container">
+  <!-- Summary Card -->
+  <mat-card class="summary-card">
+    <mat-card-header>
+      <mat-card-title>Analysis Summary</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">Total Packets</span>
+          <span class="summary-value">{{ results.file_info.total_packets | number }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Unique Sources</span>
+          <span class="summary-value">{{ results.file_info.unique_sources }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Unique Destinations</span>
+          <span class="summary-value">{{ results.file_info.unique_destinations }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Anomalies Found</span>
+          <span class="summary-value">{{ results.anomalies.length }}</span>
+        </div>
+      </div>
+
+      <div class="severity-summary">
+        <mat-chip *ngIf="results.summary.critical > 0"
+                  [style.background-color]="getSeverityColor('CRITICAL')"
+                  class="severity-chip">
+          CRITICAL: {{ results.summary.critical }}
+        </mat-chip>
+        <mat-chip *ngIf="results.summary.high > 0"
+                  [style.background-color]="getSeverityColor('HIGH')"
+                  class="severity-chip">
+          HIGH: {{ results.summary.high }}
+        </mat-chip>
+        <mat-chip *ngIf="results.summary.medium > 0"
+                  [style.background-color]="getSeverityColor('MEDIUM')"
+                  class="severity-chip">
+          MEDIUM: {{ results.summary.medium }}
+        </mat-chip>
+        <mat-chip *ngIf="results.summary.low > 0"
+                  [style.background-color]="getSeverityColor('LOW')"
+                  class="severity-chip">
+          LOW: {{ results.summary.low }}
+        </mat-chip>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="exportResults()">
+          <mat-icon>download</mat-icon>
+          Export Report (JSON)
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- No Anomalies Message -->
+  <mat-card *ngIf="results.anomalies.length === 0" class="no-anomalies-card">
+    <mat-card-content>
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h3>No significant anomalies detected</h3>
+      <p>Your network traffic appears to be normal. No suspicious patterns or security threats were identified.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Anomalies List -->
+  <div *ngIf="results.anomalies.length > 0" class="anomalies-list">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let anomaly of sortedAnomalies; let i = index"
+                          class="anomaly-panel"
+                          [class.critical]="anomaly.severity === 'CRITICAL'"
+                          [class.high]="anomaly.severity === 'HIGH'"
+                          [class.medium]="anomaly.severity === 'MEDIUM'"
+                          [class.low]="anomaly.severity === 'LOW'">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="panel-title-content">
+              <mat-icon [style.color]="getSeverityColor(anomaly.severity)">
+                {{ getSeverityIcon(anomaly.severity) }}
+              </mat-icon>
+              <span class="severity-badge" [style.background-color]="getSeverityColor(anomaly.severity)">
+                {{ anomaly.severity }}
+              </span>
+              <span class="anomaly-title">{{ anomaly.title }}</span>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="anomaly-details">
+          <!-- Description -->
+          <div class="detail-section">
+            <h4>Description</h4>
+            <p>{{ anomaly.description }}</p>
+          </div>
+
+          <!-- Evidence -->
+          <div class="detail-section" *ngIf="anomaly.evidence">
+            <h4>Evidence</h4>
+            <div class="evidence-grid">
+              <div *ngFor="let item of anomaly.evidence | keyvalue" class="evidence-item">
+                <span class="evidence-key">{{ item.key }}:</span>
+                <span class="evidence-value">{{ item.value }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Why It Matters -->
+          <div class="detail-section" *ngIf="anomaly.why_it_matters">
+            <h4>Why It Matters</h4>
+            <p>{{ anomaly.why_it_matters }}</p>
+          </div>
+
+          <!-- Recommended Actions -->
+          <div class="detail-section" *ngIf="anomaly.recommended_actions && anomaly.recommended_actions.length > 0">
+            <h4>Recommended Actions</h4>
+            <ol class="actions-list">
+              <li *ngFor="let action of anomaly.recommended_actions">{{ action }}</li>
+            </ol>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

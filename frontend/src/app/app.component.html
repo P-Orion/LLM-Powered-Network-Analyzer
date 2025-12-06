@@ -1,0 +1,33 @@
+<!-- Header -->
+<mat-toolbar color="primary" class="app-header">
+  <span class="app-title">
+    <mat-icon>security</mat-icon>
+    {{ title }}
+  </span>
+  <span class="spacer"></span>
+  <span class="privacy-badge">
+    <mat-icon>verified_user</mat-icon>
+    100% Local • No Data Leaves Your Device
+  </span>
+</mat-toolbar>
+
+<!-- Main Content -->
+<div class="app-container">
+  <!-- Upload Section -->
+  <app-upload (fileSelected)="onFileSelected($event)"></app-upload>
+
+  <!-- Results Section -->
+  <app-results
+    [progress]="progress"
+    [status]="status"
+    [message]="message"
+    [results]="results">
+  </app-results>
+</div>
+
+<!-- Footer -->
+<footer class="app-footer">
+  <p>Secure TCP Network Log Analysis • Powered by Gemma 12B (Local LLM)</p>
+</footer>
+
+<router-outlet />

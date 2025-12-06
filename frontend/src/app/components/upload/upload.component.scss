@@ -1,0 +1,86 @@
+.upload-card {
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.drop-zone {
+  border: 3px dashed #ccc;
+  border-radius: 8px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+
+  &:hover {
+    border-color: #3f51b5;
+    background-color: #f0f0f0;
+  }
+
+  &.dragging {
+    border-color: #3f51b5;
+    background-color: #e8eaf6;
+    transform: scale(1.02);
+  }
+}
+
+.upload-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #3f51b5;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin: 16px 0 8px 0;
+  color: #333;
+  font-weight: 500;
+}
+
+p {
+  margin: 0;
+  color: #666;
+}
+
+.supported-formats {
+  margin-top: 16px;
+
+  small {
+    color: #999;
+  }
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+  color: #2e7d32;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.warning-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #fff3e0;
+  border-radius: 4px;
+  color: #e65100;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
